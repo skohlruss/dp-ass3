@@ -153,7 +153,7 @@ public class Parser {
 	private static void insertDbRaw(List<Data> data){
 		try { 
 			Class.forName("org.mariadb.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/experiment");
+			Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/experiment", "experiment", "experiment");
 			con.setAutoCommit(false);
 			
 			PreparedStatement insert = con.prepareStatement("INSERT INTO raw (year, country, articles, population) VALUES (?, ?, ?, ?)");
@@ -176,7 +176,7 @@ public class Parser {
 	private static void insertDbResult(Map<String, String> result){
 		try { 
 			Class.forName("org.mariadb.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/experiment");
+			Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/experiment", "experiment", "experiment");
 			con.setAutoCommit(false);
 			
 			PreparedStatement insert = con.prepareStatement("INSERT INTO result (year, articles_per_capita) VALUES (?, ?)");
