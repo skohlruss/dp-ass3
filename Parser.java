@@ -26,16 +26,48 @@ public class Parser {
 		File articlesFile = new File("data/articles.xml");
 		File populationFile = new File("data/population.xml");
 		
+		//parse files
 		List<Record> articles = parse(articlesFile);
 		List<Record> populations = parse(populationFile);
-		
+
+		//combine raw data
 		List<Data> data = combine(articles, populations);
 
+		//experiment
 		Map<String, String> result = calculate(data);
 		
+		//output
+		//	result
 		Gson gson = new GsonBuilder().create();
-		String json = gson.toJson(result);
-		System.out.println(json);
+		String resultJson = gson.toJson(result);
+		//	raw articles
+		gson = new GsonBuilder().create();
+		String articlesJson= gson.toJson(cumulate(articles));
+		//	raw population
+		gson = new GsonBuilder().create();
+		String populationJson= gson.toJson(cumulate(populations));
+		//	create result array
+		String outputJson = String.format("{\"raw\": {\"articles\": %s, \"population\": %s}, \"result\": %s}", articlesJson, populationJson, resultJson);
+		System.out.println(outputJson);
+	}
+	
+	private static Map<String, String> cumulate(List<Record> records){
+		Map<String, Double> tmp = new TreeMap<>();
+		
+		for(Record r : records){
+			if(r.year != null && r.value != null){
+				if(tmp.get(r.year) == null) tmp.put(r.year, 0.0);
+				tmp.put(r.year, tmp.get(r.year)+r.value);
+			}
+		}
+		
+		Map<String, String> result = new TreeMap<>();
+		for(Entry<String, Double> e : tmp.entrySet()){
+			DecimalFormat df = new DecimalFormat("#.###############");
+			result.put(e.getKey(), df.format(e.getValue()));
+		}
+		
+		return result;
 	}
 
 	private static class Record {
