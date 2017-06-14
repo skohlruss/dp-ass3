@@ -135,7 +135,7 @@ public class Parser {
 		Map<String, Double> tmp = new TreeMap<>();
 		
 		for(Record r : records){
-			if(r.year != null && r.value != null){
+			if(r.country.equals("World") && r.year != null && r.value != null){
 				if(tmp.get(r.year) == null) tmp.put(r.year, 0.0);
 				tmp.put(r.year, tmp.get(r.year)+r.value);
 			}
